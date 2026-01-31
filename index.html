@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Cone Plus - Join the Movement</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1B5E20',   
+                        secondary: '#2E7D32', 
+                        accent: '#FFB300',    
+                        text: '#455A64',      
+                        dark: '#051F08',
+                    },
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+        
+        @font-face {
+            font-family: 'Prompt';
+            font-display: swap; 
+        }
+
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background-color: #F0F2F5; 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Optimized Glassmorphism: ลด Blur และ Shadow เพื่อประสิทธิภาพ */
+        .glass {
+            background: rgba(255, 255, 255, 0.85); /* เพิ่มความทึบเล็กน้อยลดภาระการ Render พื้นหลัง */
+            backdrop-filter: blur(8px); /* ลดจาก 16px เหลือ 8px */
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            /* เอา backdrop-filter ออกจากการ์ดเล็กๆ เพื่อความลื่น */
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-color: #FFB300;
+        }
+
+        /* Slider Styling */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%;
+            background: #FFB300; cursor: pointer; margin-top: -10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1); transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; cursor: pointer; background: #e0e0e0; border-radius: 10px;
+        }
+        
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body class="bg-slate-50 text-text min-h-screen relative selection:bg-accent selection:text-white">
+
+    <div class="fixed inset-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-green-200 rounded-full mix-blend-multiply filter blur-[80px] opacity-40"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-yellow-100 rounded-full mix-blend-multiply filter blur-[80px] opacity-40"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-blue-100 rounded-full mix-blend-multiply filter blur-[80px] opacity-40"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="glass max-w-7xl mx-auto px-6 py-3 mt-0 md:mt-4 md:rounded-full flex justify-between items-center shadow-sm mx-0 md:mx-auto">
+            <div class="flex items-center gap-2 text-primary">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white shadow-sm">
+                    <i class="fa-solid fa-leaf text-sm"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight">Green Cone <span class="text-accent">Plus+</span></span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
+                <a href="#problem" class="hover:text-primary transition">ปัญหา</a>
+                <a href="#innovation" class="hover:text-primary transition">นวัตกรรม</a>
+                <a href="#simulation" class="hover:text-primary transition">จำลองผลลัพธ์</a>
+                <a href="#movement" class="hover:text-accent font-bold transition">ร่วมโครงการ</a>
+            </div>
+            
+        </div>
+    </nav>
+
+    <section class="pt-32 pb-16 px-6 text-center relative">
+        <div class="max-w-5xl mx-auto" data-aos="fade-up">
+            <span class="inline-block py-1 px-3 rounded-full bg-white border border-green-200 text-primary text-xs font-bold mb-6 shadow-sm">
+                🌱 Chiang Mai Waste Solution
+            </span>
+            <h1 class="text-4xl md:text-6xl font-bold text-primary mb-6 leading-tight tracking-tight">
+                หยุดขยะเศษอาหาร...<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent">ก่อนล้นเมืองเชียงใหม่</span>
+            </h1>
+            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                นวัตกรรม <strong>Active Solar Airflow</strong> ผสานพลังชุมชนและข้อมูล<br>
+                เปลี่ยน "ภาระ" ให้เป็น "อากาศบริสุทธิ์" เริ่มต้นที่บ้านคุณวันนี้
+            </p>
+            
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="#movement" class="group bg-accent text-white font-bold py-3 px-8 rounded-full shadow hover:bg-yellow-400 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-hand-holding-heart"></i> ฉันเอาด้วย!
+                </a>
+                <a href="#simulation" class="group glass text-primary font-bold py-3 px-8 rounded-full hover:bg-white transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-calculator"></i> ลองคำนวณผลลัพธ์
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="problem" class="py-16 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="relative" data-aos="fade-right">
+                    <div class="absolute inset-0 bg-red-50 rounded-3xl transform rotate-3 scale-95 -z-10"></div>
+                    <div class="glass rounded-3xl p-8 relative border-l-8 border-red-400 bg-white">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-triangle-exclamation text-red-500 mr-2"></i>ความจริงที่น่ากลัว</h3>
+                        <p class="text-gray-600 mb-6">เชียงใหม่ผลิตขยะ <strong>320 ตัน/วัน</strong> เกินกว่าครึ่งคือ "เศษอาหาร" ที่เน่าเสีย ส่งกลิ่น และปล่อยก๊าซพิษ </p>
+                        <div class="flex gap-4">
+                            <div class="text-center p-4 bg-red-50 rounded-xl w-1/2">
+                                <p class="text-3xl font-bold text-red-500">59%</p>
+                                <p class="text-xs text-gray-500">คือขยะเศษอาหาร</p>
+                            </div>
+                            <div class="text-center p-4 bg-red-50 rounded-xl w-1/2">
+                                <p class="text-3xl font-bold text-red-500">1,000฿</p>
+                                <p class="text-xs text-gray-500">ค่ากำจัดต่อตัน</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-aos="fade-left" id="innovation">
+                    <h2 class="text-3xl font-bold text-primary mb-4">ทางออกด้วยเทคโนโลยี</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed text-lg">
+                        <strong>Green Cone Plus</strong> แก้ปัญหา "คอขวด" ของถังหมักเดิมด้วยระบบเติมอากาศ (Active Solar Airflow) 
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-gray-700">
+                            <span class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600"><i class="fa-solid fa-wind"></i></span>
+                            <span><strong>Active Airflow:</strong> ย่อยไวขึ้น 30-50% </span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-700">
+                            <span class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600"><i class="fa-solid fa-shield-virus"></i></span>
+                            <span><strong>Hygiene:</strong> ระบบเท้าเหยียบ ลดเชื้อโรค </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="simulation" class="py-16 px-6 relative">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-10" data-aos="zoom-in">
+                <span class="text-accent font-bold tracking-widest uppercase text-sm">Interactive Simulation</span>
+                <h2 class="text-3xl font-bold text-primary mt-2">พลังของการ "ร่วมมือ"</h2>
+            </div>
+
+            <div class="glass rounded-[2rem] p-6 md:p-10 shadow-lg relative border-t border-white/80 bg-white/60" data-aos="fade-up">
+                
+                <div class="text-center mb-10">
+                    <label class="text-xl font-bold text-gray-700 mb-2 block">จำนวนครัวเรือนที่เข้าร่วม</label>
+                    <div class="relative inline-block my-2">
+                        <span id="householdsVal" class="text-6xl font-bold text-primary tabular-nums tracking-tighter">1,000</span>
+                        <span class="text-xl text-gray-400 absolute -right-12 bottom-2">หลัง</span>
+                    </div>
+                    <div class="max-w-xl mx-auto relative group mt-4">
+                        <input type="range" id="households" min="100" max="10000" step="100" value="1000" class="w-full h-4 rounded-lg appearance-none cursor-pointer bg-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/50 z-20 relative">
+                        <div id="sliderTrack" class="absolute top-0 left-0 h-4 bg-gradient-to-r from-green-500 to-accent rounded-lg pointer-events-none transition-all duration-75 z-10" style="width: 10%;"></div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4 md:gap-6">
+                    <div class="glass-card rounded-2xl p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="text-primary"><i class="fa-solid fa-trash-can text-xl"></i></div>
+                            <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">ลดขยะ</span>
+                        </div>
+                        <p class="text-2xl font-bold text-gray-800 tabular-nums"><span id="wasteResult">365</span> <span class="text-sm font-normal text-gray-400">ตัน</span></p>
+                        <p class="text-xs text-gray-500 mt-1">~ รถกระบะ <span id="truckResult">365</span> เที่ยว</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="text-yellow-700"><i class="fa-solid fa-coins text-xl"></i></div>
+                            <span class="text-xs font-bold text-yellow-700 bg-yellow-50 px-2 py-1 rounded">ประหยัดงบ</span>
+                        </div>
+                        <p class="text-2xl font-bold text-gray-800 tabular-nums"><span id="moneyResult">365,000</span> <span class="text-sm font-normal text-gray-400">บ.</span></p>
+                        <p class="text-xs text-gray-500 mt-1">~ อาหารเด็ก <span id="lunchResult">9,125</span> มื้อ</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-5 bg-gradient-to-br from-primary to-green-900 text-white border-none">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="text-white"><i class="fa-solid fa-earth-americas text-xl"></i></div>
+                            <span class="text-xs font-bold text-white bg-white/20 px-2 py-1 rounded">Impact</span>
+                        </div>
+                        <p class="text-3xl font-bold text-white tabular-nums"><span id="co2Result">803</span> <span class="text-lg font-normal text-green-200">ตัน</span></p>
+                        <p class="text-xs text-green-200 mt-1 pt-1 border-t border-white/20">~ ขับรถ กทม. <span id="tripResult">4,500</span> รอบ</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="shareImpact()" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-bold shadow transition active:scale-95">
+                        <i class="fa-brands fa-facebook"></i> แชร์ให้โลกรู้
+                    </button>
+                </div>
+            </div>
+            
+            <p class="text-center text-xs text-gray-400 mt-4">
+                อ้างอิง: ขยะ 1 กก./วัน , ค่ากำจัด 1,000 บ./ตัน , ลด CO2 2.2 kg 
+            </p>
+        </div>
+    </section>
+
+    <section id="movement" class="py-16 px-6 bg-dark text-white relative">
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="text-center mb-12">
+                <span class="bg-white/10 text-accent px-3 py-1 rounded-full text-xs font-bold uppercase">Social Movement</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-4">ร่วมเป็นส่วนหนึ่งของ "เชียงใหม่โมเดล"</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6" data-aos="fade-right">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent flex items-center justify-center text-dark font-bold">1</div>
+                        <div><h4 class="font-bold text-accent">Phase 1: จุดประกาย</h4><p class="text-sm text-gray-400">นำร่องโรงอาหารและหอพัก [cite: 27]</p></div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold">2</div>
+                        <div><h4 class="font-bold">Phase 2: ขยายผล</h4><p class="text-sm text-gray-400">สร้าง Green Community ในตำบลใกล้เคียง</p></div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold">3</div>
+                        <div><h4 class="font-bold">Phase 3: เมืองต้นแบบ</h4><p class="text-sm text-gray-400">ผลักดันเป็นนโยบายระดับเมือง</p></div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-8 text-center" data-aos="fade-left">
+                    <div class="text-5xl font-bold text-white mb-2 tabular-nums" id="pledgeCounter">1,245</div>
+                    <p class="text-green-400 text-sm mb-6">ผู้เข้าร่วมโครงการแล้ว</p>
+                    <button id="pledgeBtn" onclick="pledge()" class="w-full bg-accent hover:bg-yellow-400 text-dark font-bold py-3 rounded-xl shadow-lg transition active:scale-95 text-lg">
+                        ลงชื่อสนับสนุน
+                    </button>
+                    <p id="pledgeMsg" class="text-sm text-gray-400 mt-4 hidden">ขอบคุณครับ! 🎉</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white/50 py-8 border-t border-white/10 text-center">
+        <p class="text-sm">Green Cone Plus Project © 2026</p>
+    </footer>
+
+    <script>
+        // AOS Configuration: Disable on mobile for performance
+        AOS.init({ duration: 600, once: true, offset: 50, disable: 'mobile' });
+
+        // Simulation Logic
+        const slider = document.getElementById('households');
+        const sliderTrack = document.getElementById('sliderTrack');
+        
+        // Cache DOM Elements
+        const els = {
+            households: document.getElementById('householdsVal'),
+            waste: document.getElementById('wasteResult'),
+            money: document.getElementById('moneyResult'),
+            co2: document.getElementById('co2Result'),
+            truck: document.getElementById('truckResult'),
+            lunch: document.getElementById('lunchResult'),
+            trip: document.getElementById('tripResult')
+        };
+
+        const C = { WASTE_KG: 1, DAYS: 365, COST_TON: 1000, CO2_FACTOR: 2.2, TRUCK_CAP: 1, LUNCH_PRICE: 40, CAR_EMISSION: 0.12, DIST_CNX_BKK: 700 };
+
+        let rafId = null;
+
+        function updateUI(h) {
+            const min = parseInt(slider.min);
+            const max = parseInt(slider.max);
+            sliderTrack.style.width = ((h - min) / (max - min)) * 100 + "%";
+
+            const wasteKg = h * C.WASTE_KG * C.DAYS;
+            const wasteTon = wasteKg / 1000;
+            const money = wasteTon * C.COST_TON;
+            const co2Ton = (wasteKg * C.CO2_FACTOR) / 1000;
+
+            els.households.innerText = h.toLocaleString();
+            els.waste.innerText = wasteTon.toLocaleString(undefined, {maximumFractionDigits: 1});
+            els.money.innerText = money.toLocaleString();
+            els.co2.innerText = co2Ton.toLocaleString(undefined, {maximumFractionDigits: 1});
+            
+            els.truck.innerText = Math.ceil(wasteTon / C.TRUCK_CAP).toLocaleString();
+            els.lunch.innerText = Math.floor(money / C.LUNCH_PRICE).toLocaleString();
+            els.trip.innerText = Math.floor((wasteKg * C.CO2_FACTOR) / (C.CAR_EMISSION * C.DIST_CNX_BKK * 2)).toLocaleString();
+        }
+
+        slider.addEventListener('input', () => {
+            const val = parseInt(slider.value);
+            if (!rafId) {
+                rafId = requestAnimationFrame(() => { updateUI(val); rafId = null; });
+            }
+        });
+        updateUI(parseInt(slider.value));
+
+        // Pledge & Confetti
+        function pledge() {
+            const btn = document.getElementById('pledgeBtn');
+            const counter = document.getElementById('pledgeCounter');
+            const msg = document.getElementById('pledgeMsg');
+
+            btn.disabled = true;
+            btn.innerText = 'ลงชื่อเรียบร้อย!';
+            btn.classList.replace('bg-accent', 'bg-green-500');
+            btn.classList.replace('text-dark', 'text-white');
+            
+            counter.innerText = (1246).toLocaleString();
+            msg.classList.remove('hidden');
+
+            // Lightweight Confetti
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+
+        // Share
+        function shareImpact() {
+            const h = els.households.innerText;
+            const co2 = els.co2.innerText;
+            const url = `https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(`พวกเรา ${h} ครัวเรือน ช่วยลด CO2 ได้ ${co2} ตัน! #GreenConePlus`)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
